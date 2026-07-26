@@ -9,64 +9,127 @@
     <link rel="apple-touch-icon" href="https://www.w3.org/TR/appmanifest/images/icon-192.png">
 </head>
 <body>
-    <header>
-        <h1>Smart Workout</h1>
+    <header class="app-header">
+        <h1 id="header-title">🔥 Smart Workout</h1>
     </header>
 
-    <main>
-        <section id="setup-section" class="card">
-            <h2>⚙️ My Profile</h2>
-            <div class="input-group">
-                <input type="number" id="age" placeholder="Age">
-                <input type="number" id="weight" placeholder="Weight (kg)">
-            </div>
-            <select id="goal">
-                <option value="strength">Build Strength</option>
-                <option value="cardio">Improve Cardio</option>
-                <option value="weight_loss">Weight Loss</option>
-            </select>
-            <select id="frequency">
-                <option value="2">Train 2 Days/Week</option>
-                <option value="4">Train 4 Days/Week</option>
-                <option value="6">Train 6 Days/Week</option>
-            </select>
+    <main class="content-area">
+        <!-- 1. WORKOUT TAB (MAIN PAGE) -->
+        <div id="view-workout" class="tab-view active">
+            <!-- Setup / Time Input Card -->
+            <section class="card glass">
+                <h2>⏱️ Ready to Train?</h2>
+                <div class="field-group">
+                    <label for="time-available">Time Available Today (mins):</label>
+                    <input type="number" id="time-available" placeholder="e.g. 30, 45, 60" value="30">
+                </div>
+                <button id="get-workout-btn" class="btn btn-primary glow">Generate Today's Plan</button>
+            </section>
 
-            <!-- EQUIPMENT SECTION -->
-            <h3 style="margin-top: 15px; font-size: 1rem; color: #4776E6;">My Equipment:</h3>
-            <div class="checkbox-group">
-                <label><input type="checkbox" id="eq-treadmill"> Treadmill / Garden (Walk/Jog)</label>
-                <label><input type="checkbox" id="eq-bike"> Indoor Bike</label>
-                <label><input type="checkbox" id="eq-mat"> Yoga Mat (Floor/Core work)</label>
-                <label><input type="checkbox" id="eq-machine"> Weights Machine</label>
-                <label><input type="checkbox" id="eq-squat"> Squat Rack / Free Weights</label>
-            </div>
+            <!-- Active Workout Session Area -->
+            <section id="active-session" class="card hidden">
+                <div class="session-header">
+                    <span id="recovery-badge" class="badge">Suggested Focus</span>
+                    <h2 id="session-title">Today's Routine</h2>
+                </div>
+                <p id="session-desc" class="muted-text"></p>
 
-            <button id="save-profile" class="primary-btn">Save Profile</button>
-        </section>
+                <div id="exercise-list">
+                    <!-- Exercise cards injected via JavaScript -->
+                </div>
 
-        <section id="daily-section" class="card">
-            <h2>🏃 Today's Session</h2>
-            <input type="number" id="time-available" placeholder="Time Available (mins)">
-            <button id="get-workout-btn" class="primary-btn">Generate Plan</button>
-            
-            <div id="workout-plan" class="hidden">
-                <h3>Your Plan:</h3>
-                <p id="suggested-routine"></p>
-                
-                <hr>
-                
-                <h3>Log Results:</h3>
-                <button id="dictate-btn" class="voice-btn">🎤 Dictate Workout Data</button>
-                <p id="dictation-output"></p>
-                <button id="finish-workout-btn" class="success-btn hidden">Finish & Save</button>
-            </div>
-        </section>
+                <!-- Custom Manual Exercise Add (For manual baseline entry) -->
+                <div class="manual-add-box">
+                    <h3>➕ Add Custom Exercise / Baseline</h3>
+                    <input type="text" id="custom-ex-name" placeholder="Exercise (e.g. Squat / Bike)">
+                    <div class="input-group">
+                        <input type="text" id="custom-ex-target" placeholder="Goal (e.g. 3 sets x 10 reps @ 20kg or 15 mins)">
+                    </div>
+                    <button id="add-custom-ex-btn" class="btn btn-secondary">+ Add To Session</button>
+                </div>
 
-        <section id="history-section" class="card">
-            <h2>📅 Workout History</h2>
-            <div id="history-list"></div>
-        </section>
+                <div class="session-actions">
+                    <button id="finish-workout-btn" class="btn btn-success glow">🏆 Complete & Save Session</button>
+                </div>
+            </section>
+        </div>
+
+        <!-- 2. PROFILE & EQUIPMENT TAB -->
+        <div id="view-profile" class="tab-view">
+            <section class="card">
+                <h2>👤 Personal Profile</h2>
+                <div class="input-group">
+                    <div class="field">
+                        <label>Age</label>
+                        <input type="number" id="age" placeholder="35">
+                    </div>
+                    <div class="field">
+                        <label>Weight (kg)</label>
+                        <input type="number" id="weight" placeholder="75">
+                    </div>
+                </div>
+
+                <div class="field">
+                    <label>Primary Goal</label>
+                    <select id="goal">
+                        <option value="strength">Build Strength & Muscle</option>
+                        <option value="cardio">Improve Endurance & Cardio</option>
+                        <option value="weight_loss">Weight Loss & Conditioning</option>
+                    </select>
+                </div>
+
+                <div class="field">
+                    <label>Target Days per Week</label>
+                    <select id="frequency">
+                        <option value="1">1 Day / Week</option>
+                        <option value="2">2 Days / Week</option>
+                        <option value="3">3 Days / Week</option>
+                        <option value="4" selected>4 Days / Week</option>
+                        <option value="5">5 Days / Week</option>
+                        <option value="6">6 Days / Week</option>
+                        <option value="7">7 Days / Week</option>
+                    </select>
+                </div>
+
+                <h3 class="section-subtitle">🏋️ Available Equipment</h3>
+                <div class="checkbox-grid">
+                    <label class="checkbox-card"><input type="checkbox" id="eq-treadmill"> 🏃 Treadmill / Garden</label>
+                    <label class="checkbox-card"><input type="checkbox" id="eq-bike"> 🚴 Indoor Bike</label>
+                    <label class="checkbox-card"><input type="checkbox" id="eq-mat"> 🧘 Yoga / Exercise Mat</label>
+                    <label class="checkbox-card"><input type="checkbox" id="eq-machine"> 🏗️ Multigym Weight Machine</label>
+                    <label class="checkbox-card"><input type="checkbox" id="eq-squat"> 🏋️ Squat Rack & Free Weights</label>
+                </div>
+
+                <button id="save-profile" class="btn btn-primary">Save Profile & Settings</button>
+            </section>
+        </div>
+
+        <!-- 3. HISTORY TAB -->
+        <div id="view-history" class="tab-view">
+            <section class="card">
+                <h2>📅 Training History</h2>
+                <div id="history-list">
+                    <p class="muted-text">No completed workouts yet.</p>
+                </div>
+            </section>
+        </div>
     </main>
+
+    <!-- Bottom Navigation Bar -->
+    <nav class="bottom-nav">
+        <button class="nav-btn active" data-target="view-workout">
+            <span class="nav-icon">🏋️</span>
+            <span class="nav-label">Workout</span>
+        </button>
+        <button class="nav-btn" data-target="view-profile">
+            <span class="nav-icon">⚙️</span>
+            <span class="nav-label">Profile & Gear</span>
+        </button>
+        <button class="nav-btn" data-target="view-history">
+            <span class="nav-icon">📊</span>
+            <span class="nav-label">History</span>
+        </button>
+    </nav>
 
     <script src="app.js"></script>
 </body>
