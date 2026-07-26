@@ -1,73 +1,159 @@
-// 1. Hook up the buttons
+// Elements
 const saveProfileBtn = document.getElementById('save-profile');
-const dictateBtn = document.getElementById('dictate-btn');
 const getWorkoutBtn = document.getElementById('get-workout-btn');
-const dictationOutput = document.getElementById('dictation-output');
-const suggestedRoutine = document.getElementById('suggested-routine');
+const dictateBtn = document.getElementById('dictate-btn');
+const finishWorkoutBtn = document.getElementById('finish-workout-btn');
+const workoutPlan = document.getElementById('workout-plan');
+const historyList = document.getElementById('history-list');
 
-// 2. Save Profile Logic
+let currentDictation = "";
+
+// Load existing data on startup
+window.onload = () => {
+    loadProfile();
+    loadHistory();
+};
+
+// 1. Profile Logic (Now includes Equipment)
+function loadProfile() {
+    const profile = JSON.parse(localStorage.getItem('workoutProfile'));
+    if (profile) {
+        document.getElementById('age').value = profile.age || '';
+        document.getElementById('weight').value = profile.weight || '';
+        document.getElementById('goal').value = profile.goal || 'strength';
+        document.getElementById('frequency').value = profile.frequency || '4';
+        
+        // Load equipment (fallback to empty object if older profile exists)
+        const eq = profile.equipment || {};
+        document.getElementById('eq-treadmill').checked = eq.treadmill || false;
+        document.getElementById('eq-bike').checked = eq.bike || false;
+        document.getElementById('eq-mat').checked = eq.mat || false;
+        document.getElementById('eq-machine').checked = eq.machine || false;
+        document.getElementById('eq-squat').checked = eq.squat || false;
+    }
+}
+
 saveProfileBtn.addEventListener('click', () => {
-    const age = document.getElementById('age').value;
-    const weight = document.getElementById('weight').value;
-    const goal = document.getElementById('goal').value;
-    
-    // Save to the browser's local storage
-    localStorage.setItem('workoutProfile', JSON.stringify({ age, weight, goal }));
-    alert('Profile Saved Successfully!');
+    const profile = {
+        age: document.getElementById('age').value,
+        weight: document.getElementById('weight').value,
+        goal: document.getElementById('goal').value,
+        frequency: document.getElementById('frequency').value,
+        equipment: {
+            treadmill: document.getElementById('eq-treadmill').checked,
+            bike: document.getElementById('eq-bike').checked,
+            mat: document.getElementById('eq-mat').checked,
+            machine: document.getElementById('eq-machine').checked,
+            squat: document.getElementById('eq-squat').checked
+        }
+    };
+    localStorage.setItem('workoutProfile', JSON.stringify(profile));
+    alert('Profile & Equipment Saved!');
 });
 
-// 3. Voice Dictation Logic
-dictateBtn.addEventListener('click', () => {
-    // Check if the browser supports speech recognition
-    const SpeechRecognition = window.SpeechRecognition || window.webkitSpeechRecognition;
+// 2. Smart Workout Generator
+getWorkoutBtn.addEventListener('click', () => {
+    const time = document.getElementById('time-available').value;
+    const profile = JSON.parse(localStorage.getItem('workoutProfile'));
     
+    if (!time || !profile) {
+        alert("Save your profile and enter time first.");
+        return;
+    }
+
+    const eq = profile.equipment || {};
+    let exercises = [];
+
+    // Build routine based on equipment AND goals
+    if (profile.goal === 'cardio' || profile.goal === 'weight_loss') {
+        if (eq.treadmill) exercises.push("Interval Walk/Jog");
+        if (eq.bike) exercises.push("High-Resistance Bike Intervals");
+        if (eq.mat) exercises.push("Bodyweight Burpees & Mountain Climbers");
+    } 
+    
+    if (profile.goal === 'strength' || profile.goal === 'weight_loss') {
+        if (eq.squat) exercises.push("Barbell Squats & Deadlifts");
+        if (eq.machine) exercises.push("Machine Chest Press & Lat Pulldowns");
+        if (eq.mat) exercises.push("Core Planks & Push-ups");
+    }
+
+    // Fallback if no equipment selected
+    if (exercises.length === 0) {
+        exercises.push("Bodyweight Squats, Lunges, and Jumping Jacks");
+    }
+
+    workoutPlan.classList.remove('hidden');
+    
+    let workoutText = `⏱️ Time: ${time} Minutes\n🎯 Focus: ${profile.goal.replace('_', ' ').toUpperCase()}\n\n`;
+    workoutText += `Based on your gear, focus on a circuit of:\n• ${exercises.join('\n• ')}\n\n`;
+    workoutText += `Warm up for 5 mins, cycle through the exercises, and save 5 mins for cooldown.`;
+    
+    document.getElementById('suggested-routine').innerText = workoutText;
+});
+
+// 3. Smart Dictation
+dictateBtn.addEventListener('click', () => {
+    const SpeechRecognition = window.SpeechRecognition || window.webkitSpeechRecognition;
     if (!SpeechRecognition) {
-        dictationOutput.innerHTML = "<em>Sorry, your browser doesn't support voice dictation yet.</em>";
+        alert("Voice dictation not supported on this browser.");
         return;
     }
     
     const recognition = new SpeechRecognition();
-    
-    recognition.onstart = () => {
-        dictationOutput.innerHTML = "<strong>Listening... Speak now.</strong>";
-    };
+    recognition.onstart = () => document.getElementById('dictation-output').innerHTML = "<em>Listening...</em>";
     
     recognition.onresult = (event) => {
-        const transcript = event.results[0][0].transcript;
-        dictationOutput.innerHTML = `<strong>You said:</strong> "${transcript}"`;
+        const transcript = event.results[0][0].transcript.toLowerCase();
+        currentDictation = transcript;
+        document.getElementById('dictation-output').innerHTML = `<strong>Logged:</strong> "${transcript}"`;
+        finishWorkoutBtn.classList.remove('hidden');
     };
-    
     recognition.start();
 });
 
-// 4. Workout Generation Logic
-getWorkoutBtn.addEventListener('click', () => {
+// 4. Finish, Calculate Health Stats & Save History
+finishWorkoutBtn.addEventListener('click', () => {
     const time = document.getElementById('time-available').value;
-    const profileData = JSON.parse(localStorage.getItem('workoutProfile'));
+    const profile = JSON.parse(localStorage.getItem('workoutProfile'));
     
-    if (!time || !profileData) {
-        suggestedRoutine.innerText = "Please save your profile and enter your available time first!";
-        return;
-    }
-
-    let workout = "";
+    const calories = Math.round(profile.weight * 6 * (time / 60));
+    const date = new Date().toLocaleDateString();
     
-    // Create a basic plan based on the chosen goal
-    if (profileData.goal === 'strength') {
-        workout = `Strength Focus: Complete a ${time}-minute circuit of Push-ups, Squats, and Planks. Work for 45 seconds, rest for 15.`;
-    } else if (profileData.goal === 'cardio') {
-        workout = `Cardio Focus: Go for a ${time}-minute brisk walk, jog, or cycle. Try to keep your heart rate elevated!`;
-    } else if (profileData.goal === 'weight_loss') {
-        workout = `Weight Loss Focus: Do a ${time}-minute HIIT session. Alternate between jumping jacks, burpees, and high knees.`;
-    }
+    const historyItem = {
+        date: date,
+        time: time,
+        notes: currentDictation,
+        stats: `Burned ~${calories} kcal. Great session!`
+    };
 
-    suggestedRoutine.innerText = workout;
+    let history = JSON.parse(localStorage.getItem('workoutHistory')) || [];
+    history.unshift(historyItem);
+    localStorage.setItem('workoutHistory', JSON.stringify(history));
+    
+    loadHistory();
+    workoutPlan.classList.add('hidden'); 
+    currentDictation = "";
 });
-// 5. Register Service Worker for PWA
+
+// 5. Display History
+function loadHistory() {
+    const history = JSON.parse(localStorage.getItem('workoutHistory')) || [];
+    historyList.innerHTML = "";
+    history.forEach(item => {
+        const div = document.createElement('div');
+        div.className = 'history-item';
+        div.innerHTML = `
+            <strong>${item.date}</strong> - ${item.time} mins<br>
+            <em>Note: ${item.notes}</em><br>
+            <div class="health-stat">📈 ${item.stats}</div>
+        `;
+        historyList.appendChild(div);
+    });
+}
+
+// 6. Service Worker
 if ('serviceWorker' in navigator) {
     window.addEventListener('load', () => {
-        navigator.serviceWorker.register('./sw.js')
-            .then(req => console.log('Service Worker Registered!'))
-            .catch(err => console.log('Service Worker registration failed:', err));
+        navigator.serviceWorker.register('./sw.js').catch(err => console.log('SW failed', err));
     });
 }
