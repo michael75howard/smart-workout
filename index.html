@@ -1,0 +1,58 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Smart Workout</title>
+    <!-- We will link the CSS and Manifest here later -->
+</head>
+<body>
+
+    <header>
+        <h1>My Smart Workout</h1>
+    </header>
+
+    <main>
+        <!-- Initial Setup Section -->
+        <section id="setup-section">
+            <h2>Baseline Profile</h2>
+            <label for="age">Age:</label>
+            <input type="number" id="age" placeholder="e.g., 35"><br><br>
+
+            <label for="weight">Weight (kg):</label>
+            <input type="number" id="weight" placeholder="e.g., 80"><br><br>
+
+            <label for="goal">Primary Goal:</label>
+            <select id="goal">
+                <option value="strength">Build Strength</option>
+                <option value="cardio">Improve Cardio</option>
+                <option value="weight_loss">Weight Loss</option>
+            </select><br><br>
+            
+            <button id="save-profile">Save Profile</button>
+        </section>
+
+        <hr>
+
+        <!-- Daily Input Section -->
+        <section id="daily-section">
+            <h2>Today's Session</h2>
+            <label for="time-available">Time Available (mins):</label>
+            <input type="number" id="time-available" placeholder="e.g., 45"><br><br>
+
+            <button id="dictate-btn">🎤 Dictate Update</button>
+            <p id="dictation-output"><em>Voice input will appear here...</em></p>
+
+            <button id="get-workout-btn">Get Suggested Workout</button>
+        </section>
+
+        <!-- Output Section -->
+        <section id="workout-plan">
+            <h3>Your Plan:</h3>
+            <p id="suggested-routine">Fill in your details to get a workout.</p>
+        </section>
+    </main>
+
+    <!-- We will link the JavaScript here later -->
+</body>
+</html>
