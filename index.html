@@ -2,20 +2,19 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
     <title>Smart Workout</title>
     <link rel="stylesheet" href="style.css">
     <link rel="manifest" href="manifest.json">
+    <link rel="apple-touch-icon" href="https://www.w3.org/TR/appmanifest/images/icon-192.png">
 </head>
 <body>
-
     <header>
-        <h1>My Smart Workout</h1>
+        <h1>Smart Workout</h1>
     </header>
 
     <main>
-        <!-- Initial Setup Section -->
-<section id="setup-section" class="card">
+        <section id="setup-section" class="card">
             <h2>⚙️ My Profile</h2>
             <div class="input-group">
                 <input type="number" id="age" placeholder="Age">
@@ -32,7 +31,7 @@
                 <option value="6">Train 6 Days/Week</option>
             </select>
 
-            <!-- NEW EQUIPMENT SECTION -->
+            <!-- EQUIPMENT SECTION -->
             <h3 style="margin-top: 15px; font-size: 1rem; color: #4776E6;">My Equipment:</h3>
             <div class="checkbox-group">
                 <label><input type="checkbox" id="eq-treadmill"> Treadmill / Garden (Walk/Jog)</label>
@@ -44,29 +43,31 @@
 
             <button id="save-profile" class="primary-btn">Save Profile</button>
         </section>
+
+        <section id="daily-section" class="card">
+            <h2>🏃 Today's Session</h2>
+            <input type="number" id="time-available" placeholder="Time Available (mins)">
+            <button id="get-workout-btn" class="primary-btn">Generate Plan</button>
+            
+            <div id="workout-plan" class="hidden">
+                <h3>Your Plan:</h3>
+                <p id="suggested-routine"></p>
+                
+                <hr>
+                
+                <h3>Log Results:</h3>
+                <button id="dictate-btn" class="voice-btn">🎤 Dictate Workout Data</button>
+                <p id="dictation-output"></p>
+                <button id="finish-workout-btn" class="success-btn hidden">Finish & Save</button>
+            </div>
         </section>
 
-        <hr>
-
-        <!-- Daily Input Section -->
-        <section id="daily-section">
-            <h2>Today's Session</h2>
-            <label for="time-available">Time Available (mins):</label>
-            <input type="number" id="time-available" placeholder="e.g., 45"><br><br>
-
-            <button id="dictate-btn">🎤 Dictate Update</button>
-            <p id="dictation-output"><em>Voice input will appear here...</em></p>
-
-            <button id="get-workout-btn">Get Suggested Workout</button>
-        </section>
-
-        <!-- Output Section -->
-        <section id="workout-plan">
-            <h3>Your Plan:</h3>
-            <p id="suggested-routine">Fill in your details to get a workout.</p>
+        <section id="history-section" class="card">
+            <h2>📅 Workout History</h2>
+            <div id="history-list"></div>
         </section>
     </main>
 
-   <script src="app.js"></script>
+    <script src="app.js"></script>
 </body>
 </html>
