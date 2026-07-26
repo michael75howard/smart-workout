@@ -1,4 +1,4 @@
-const cacheName = 'smart-workout-v5';
+const cacheName = 'smart-workout-v6';
 const staticAssets = [
   './',
   './index.html',
