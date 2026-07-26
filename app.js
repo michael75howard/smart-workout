@@ -63,3 +63,11 @@ getWorkoutBtn.addEventListener('click', () => {
 
     suggestedRoutine.innerText = workout;
 });
+// 5. Register Service Worker for PWA
+if ('serviceWorker' in navigator) {
+    window.addEventListener('load', () => {
+        navigator.serviceWorker.register('./sw.js')
+            .then(req => console.log('Service Worker Registered!'))
+            .catch(err => console.log('Service Worker registration failed:', err));
+    });
+}
