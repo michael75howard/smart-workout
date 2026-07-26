@@ -61,3 +61,32 @@ hr {
     background: #ddd;
     margin: 20px 0;
 }
+<section id="setup-section" class="card">
+            <h2>⚙️ My Profile</h2>
+            <div class="input-group">
+                <input type="number" id="age" placeholder="Age">
+                <input type="number" id="weight" placeholder="Weight (kg)">
+            </div>
+            <select id="goal">
+                <option value="strength">Build Strength</option>
+                <option value="cardio">Improve Cardio</option>
+                <option value="weight_loss">Weight Loss</option>
+            </select>
+            <select id="frequency">
+                <option value="2">Train 2 Days/Week</option>
+                <option value="4">Train 4 Days/Week</option>
+                <option value="6">Train 6 Days/Week</option>
+            </select>
+
+            <!-- NEW EQUIPMENT SECTION -->
+            <h3 style="margin-top: 15px; font-size: 1rem; color: #4776E6;">My Equipment:</h3>
+            <div class="checkbox-group">
+                <label><input type="checkbox" id="eq-treadmill"> Treadmill / Garden (Walk/Jog)</label>
+                <label><input type="checkbox" id="eq-bike"> Indoor Bike</label>
+                <label><input type="checkbox" id="eq-mat"> Yoga Mat (Floor/Core work)</label>
+                <label><input type="checkbox" id="eq-machine"> Weights Machine</label>
+                <label><input type="checkbox" id="eq-squat"> Squat Rack / Free Weights</label>
+            </div>
+
+            <button id="save-profile" class="primary-btn">Save Profile</button>
+        </section>
