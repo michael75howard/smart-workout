@@ -30,13 +30,22 @@
                     <span id="recovery-badge" class="badge">Suggested Focus</span>
                     <h2 id="session-title">Today's Routine</h2>
                 </div>
-                <p id="session-desc" class="muted-text"></p>
+                
+                <!-- NEW REST TIMER -->
+                <div class="stopwatch-container">
+                    <div class="time-display" id="timer-display">00:00</div>
+                    <div class="timer-controls">
+                        <button id="timer-start" class="btn btn-success btn-sm">▶ Start Rest</button>
+                        <button id="timer-stop" class="btn btn-warning btn-sm">⏸ Pause</button>
+                        <button id="timer-reset" class="btn btn-secondary btn-sm">⏹ Reset</button>
+                    </div>
+                </div>
+                <hr>
 
                 <div id="exercise-list">
                     <!-- Exercise cards injected here -->
                 </div>
 
-                <!-- Custom Manual Exercise Add -->
                 <div class="manual-add-box">
                     <h3>➕ Add Custom Exercise</h3>
                     <input type="text" id="custom-ex-name" placeholder="Exercise (e.g. Squat / Bike)">
