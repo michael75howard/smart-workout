@@ -14,9 +14,8 @@
     </header>
 
     <main class="content-area">
-        <!-- 1. WORKOUT TAB (MAIN PAGE) -->
+        <!-- 1. WORKOUT TAB -->
         <div id="view-workout" class="tab-view active">
-            <!-- Setup / Time Input Card -->
             <section class="card glass">
                 <h2>⏱️ Ready to Train?</h2>
                 <div class="field-group">
@@ -26,7 +25,6 @@
                 <button id="get-workout-btn" class="btn btn-primary glow">Generate Today's Plan</button>
             </section>
 
-            <!-- Active Workout Session Area -->
             <section id="active-session" class="card hidden">
                 <div class="session-header">
                     <span id="recovery-badge" class="badge">Suggested Focus</span>
@@ -35,21 +33,23 @@
                 <p id="session-desc" class="muted-text"></p>
 
                 <div id="exercise-list">
-                    <!-- Exercise cards injected via JavaScript -->
+                    <!-- Exercise cards injected here -->
                 </div>
 
-                <!-- Custom Manual Exercise Add (For manual baseline entry) -->
+                <!-- Custom Manual Exercise Add -->
                 <div class="manual-add-box">
-                    <h3>➕ Add Custom Exercise / Baseline</h3>
+                    <h3>➕ Add Custom Exercise</h3>
                     <input type="text" id="custom-ex-name" placeholder="Exercise (e.g. Squat / Bike)">
-                    <div class="input-group">
-                        <input type="text" id="custom-ex-target" placeholder="Goal (e.g. 3 sets x 10 reps @ 20kg or 15 mins)">
+                    <div class="input-group" style="margin-top: 10px;">
+                        <input type="number" id="custom-ex-sets" placeholder="Sets">
+                        <input type="number" id="custom-ex-reps" placeholder="Reps">
+                        <input type="number" id="custom-ex-weight" placeholder="Weight">
                     </div>
                     <button id="add-custom-ex-btn" class="btn btn-secondary">+ Add To Session</button>
                 </div>
 
                 <div class="session-actions">
-                    <button id="finish-workout-btn" class="btn btn-success glow">🏆 Complete & Save Session</button>
+                    <button id="finish-workout-btn" class="btn btn-success glow">🏆 Complete Session</button>
                 </div>
             </section>
         </div>
@@ -114,6 +114,20 @@
             </section>
         </div>
     </main>
+
+    <!-- POST-WORKOUT MODAL -->
+    <div id="post-workout-modal" class="modal hidden">
+        <div class="modal-content card">
+            <h2>🎉 Session Complete!</h2>
+            <div id="health-stat-box" class="health-stat-callout"></div>
+            
+            <h3 style="margin-top: 20px;">📅 Proposed Next Session:</h3>
+            <p id="next-session-proposal" class="proposal-text"></p>
+            
+            <button id="approve-next-btn" class="btn btn-primary glow">Approve & Notify Me</button>
+            <button id="close-modal-btn" class="btn btn-secondary">Skip Notification & Save</button>
+        </div>
+    </div>
 
     <!-- Bottom Navigation Bar -->
     <nav class="bottom-nav">
